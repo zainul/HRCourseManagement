@@ -1,0 +1,191 @@
+<div id="gridUser"></div>
+<script>
+    function getDropdownArea(callback){
+        $.ajax({
+            url:'/area/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownGrade(callback){
+        $.ajax({
+            url:'/grade/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownUserLevel(callback){
+        $.ajax({
+            url:'/userlevel/get_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownUnit(callback){
+        $.ajax({
+            url:'/unit/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    var isregularclient = [
+        {
+            value:true,
+            text:"Regular"
+        },
+        {
+            value:false,
+            text:"Non Regular"
+        }
+    ]
+
+    var statusclient = [
+        {
+            value:1,
+            text:"Sudah"
+        },
+        {
+            value:null,
+            text:"Belum"
+        }
+    ]
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/user/get_kendo_format"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        name:{validation: { required: true }},
+                        password:{validation: { required: true }},
+                        nip:{validation: { required: true }},
+                        user_level:{validation: { required: true },field:"user_level",type: "number", defaultValue: 1 },
+                        unit:{validation: { required: true },field:"unit",type: "number", defaultValue: 1 },
+                        area: { validation: { required: true },field:"area",type: "number", defaultValue: 1 },
+                        grade:{ validation: { required: true },field:"grade",type: "number", defaultValue: 1 }
+                    }
+                }
+            }
+        });
+        /*
+
+         */
+        getDropdownArea(function(area_data){
+            getDropdownGrade(function(grade_data){
+                getDropdownUnit(function(unit_data){
+                    getDropdownUserLevel(function(user_level_data){
+                        $("#gridUser").kendoGrid({
+                            dataSource: dataSource,
+                            pageable: true,
+                            filterable: {
+                                mode: "row"
+                            },
+                            scrollable: {
+                                virtual: true
+                            },
+                            groupable:true,
+                            height: 550,
+                            detailInit: detailInit,
+                            columns: [
+                                { field:"name", title: "Nama", width: "220px"},
+                                { field:"password", title: "Password",width: "220px"},
+                                { field:"nip", title: "NIP",width: "220px"},
+                                { field:"user_level", title: "Jabatan",values:user_level_data ,width: "320px"},
+                                { field:"unit", title: "Unit" ,width: "220px",values:unit_data },
+                                { field:"area", title: "Area" ,width: "220px",values:area_data},
+                                { field:"grade", title: "Grade" ,width: "220px",values:grade_data}]
+                        });
+                    })
+                })
+            })
+        })
+
+
+        function detailInit(e) {
+            console.log(e)
+            $("<div/>").appendTo(e.detailCell).kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: "/user_training/get_kendo_format_subgrid?userId="+ e.data.id+"&userLevelId="+e.data.user_level
+                    },
+                    pageSize: 10,
+                    schema: {
+                        model: {
+                            id: "id",
+                            fields: {
+                                status:{validation: { required: true },field:"status",type: "number"},
+                                username:{validation: { required: true }},
+                                nip:{validation: { required: true }},
+                                institute:{validation: { required: true }},
+                                city:{validation: { required: true }},
+                                name:{validation: { required: true }},
+                                code:{validation: { required: true }},
+                                start_date:{validation: { required: true },type:"date"},
+                                end_date:{validation: { required: true },type:"date"},
+                                point:{validation: { required: true }},
+                                certificate_number:{validation: { required: true }},
+                                certificate_date:{validation: { required: true },type:"date"},
+                                isRegular:{validation: { required: true }},
+                                directory:{validation: { required: true }}
+                            }
+                        }
+                    }
+                },
+                scrollable: false,
+                sortable: true,
+                filterable: true,
+                groupable:true,
+                pageable: true,
+                columns: [
+                    { field: "status", title:"Status",values: statusclient,width: "370px" },
+                    { field: "username", title:"Nama",width: "370px" },
+                    { field: "nip", title:"NIP", width: "230px" },
+                    { field: "institute", title:"Penyelenggara", width: "230px" },
+                    { field: "city", title:"Kota", width: "230px" },
+                    { field: "name", title:"Diklat", width: "230px" },
+                    { field: "code", title:"Kode Diklat", width: "230px" },
+                    { field: "start_date", title:"Mulai", width: "230px" ,format:"{0:MM-dd-yyyy}"},
+                    { field: "end_date", title:"Akhir", width: "230px" ,format:"{0:MM-dd-yyyy}"},
+                    { field: "point", title:"Nilai", width: "230px" },
+                    { field: "certificate_number", title:"No Sertifikat", width: "230px" },
+                    { field: "certificate_date", title:"Tanggal Sertifikat", width: "230px",format:"{0:MM-dd-yyyy}" },
+                    { field: "isRegular", title:"Regular", width: "230px",values:isregularclient },
+                    { field: "directory", title:"Direktori Diklat" }
+                ]
+            });
+        }
+    });
+</script>

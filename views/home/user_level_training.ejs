@@ -1,0 +1,54 @@
+<div id="gridUserLevelTraining"></div>
+<script>
+    $(document).ready(function() {
+        var element = $("#gridUserLevelTraining").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: "/userlevel"
+                },
+                pageSize: 6
+            },
+            height: 600,
+            sortable: true,
+            pageable: true,
+            filterable: {
+                mode: "row"
+            },
+            detailInit: detailInit,
+            dataBound: function() {
+                this.expandRow(this.tbody.find("tr.k-master-row").first());
+            },
+            columns: [
+                {
+                    field: "name",
+                    title: "Jabatan"
+                }
+            ]
+        });
+    });
+
+    function detailInit(e) {
+        console.log(e)
+        $("<div/>").appendTo(e.detailCell).kendoGrid({
+            dataSource: {
+                transport: {
+                    read: "/training/get_kendo_as_subgrid_format?userlevel="+ e.data.id
+                },
+                pageSize: 10
+            },
+            scrollable: false,
+            sortable: true,
+            filterable: {
+                mode: "row"
+            },
+            groupable:true,
+            pageable: true,
+            columns: [
+                { field: "name", title:"Diklat",width: "370px" },
+                { field: "code", title:"Kode Diklat", width: "230px" },
+                { field: "directory", title:"Direktori Diklat" }
+            ]
+        });
+    }
+</script>
+

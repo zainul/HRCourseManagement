@@ -1,0 +1,56 @@
+<script src="/js/bootstrap.min.js"></script>
+<script>
+    function loadContent(url){
+        $('#content').html("<center>Mohon Tunggu Sebentar . . .</center>");
+        $('#content').load(url);
+    }
+    $(document).ready(function () {
+
+    });
+</script>
+<nav class="navbar navbar-default nav-on-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" id="lblHeaderId"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><a href="javascript:loadContent('/admin/user_training')">Diklat Pegawai</a></li>
+                <li><a href="javascript:loadContent('/admin/area')">PLN Area</a></li>
+                <li><a href="javascript:loadContent('/admin/city')">Kota</a></li>
+                <li><a href="javascript:loadContent('/admin/directory')">Direktori Diklat</a></li>
+                <li><a href="javascript:loadContent('/admin/grade')">Grade</a></li>
+                <li><a href="javascript:loadContent('/admin/unit')">Unit</a></li>
+                <li><a href="javascript:loadContent('/admin/institute')">Lembaga Diklat</a></li>
+                <li><a href="javascript:loadContent('/admin/user_level')">Jabatan</a></li>
+                <li><a href="javascript:loadContent('/admin/user')">Pegawai</a></li>
+                <!--<li class="dropdown">
+                    <a href="javascript:void(1)" class="dropdown-toggle" data-toggle="dropdown">Data Master Sistem<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+
+                    </ul>
+                </li>-->
+
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Masuk</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+    <div id="content">
+        <center>
+            <h3>Selamat Datang pada layanan Sistem Diklat Terpadu</h3>
+        </center>
+    </div>
+</div>

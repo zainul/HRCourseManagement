@@ -1,0 +1,135 @@
+<div id="gridUser"></div>
+<script>
+    function getDropdownArea(callback){
+        $.ajax({
+            url:'/area/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownGrade(callback){
+        $.ajax({
+            url:'/grade/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownUserLevel(callback){
+        $.ajax({
+            url:'/userlevel/get_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownUnit(callback){
+        $.ajax({
+            url:'/unit/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/user/get_kendo_format"
+                },
+                update: {
+                    url: function(options){
+                        return "/user/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/user/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/user",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        name:{validation: { required: true }},
+                        password:{validation: { required: true }},
+                        nip:{validation: { required: true }},
+                        user_level:{validation: { required: true },field:"user_level",type: "number", defaultValue: 1 },
+                        unit:{validation: { required: true },field:"unit",type: "number", defaultValue: 1 },
+                        area: { validation: { required: true },field:"area",type: "number", defaultValue: 1 },
+                        grade:{ validation: { required: true },field:"grade",type: "number", defaultValue: 1 }
+                    }
+                }
+            }
+        });
+        /*
+
+         */
+        getDropdownArea(function(area_data){
+            getDropdownGrade(function(grade_data){
+                getDropdownUnit(function(unit_data){
+                    getDropdownUserLevel(function(user_level_data){
+                        $("#gridUser").kendoGrid({
+                            dataSource: dataSource,
+                            pageable: true,
+                            filterable: {
+                                mode: "row"
+                            },
+                            scrollable: {
+                                virtual: true
+                            },
+                            groupable:true,
+                            height: 550,
+                            toolbar: ["create"],
+                            columns: [
+                                { field:"name", title: "Nama", width: "400px"},
+                                { field:"password", title: "Password",width: "220px"},
+                                { field:"nip", title: "NIP",width: "220px"},
+                                { field:"user_level", title: "Jabatan",values:user_level_data ,width: "220px"},
+                                { field:"unit", title: "Unit" ,width: "220px",values:unit_data },
+                                { field:"area", title: "Area" ,width: "220px",values:area_data},
+                                { field:"grade", title: "Grade" ,width: "220px",values:grade_data},
+                                { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+                            editable: "inline"
+                        });
+                    })
+                })
+            })
+        })
+    });
+</script>

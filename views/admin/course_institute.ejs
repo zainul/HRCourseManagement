@@ -1,0 +1,79 @@
+<div id="gridCourseInstitute"></div>
+<script>
+    function getcities(callback){
+        $.ajax({
+            url:'/city/get_city_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/courseinstitute/get_course_institute_kendo_format"
+                },
+                update: {
+                    url: function(options){
+                        return "/courseinstitute/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/courseinstitute/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/courseinstitute",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        name: { validation: { required: true } }
+                    }
+                }
+            }
+        });
+
+        getcities(function(cities_data){
+            $("#gridCourseInstitute").kendoGrid({
+                dataSource: dataSource,
+                pageable: true,
+                filterable: {
+                    mode: "row"
+                },
+                height: 550,
+                width:600,
+                toolbar: ["create"],
+                columns: [
+                    { field:"name", title: "Nama" },
+                    { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+                editable: "inline"
+            });
+        })
+    });
+</script>

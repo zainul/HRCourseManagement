@@ -1,0 +1,66 @@
+<div id="gridDirectory"></div>
+<script>
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/training_directory"
+                },
+                update: {
+                    url: function(options){
+                        return "/training_directory/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/training_directory/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/training_directory",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        name: { validation: { required: true } }
+                    }
+                }
+            }
+        });
+
+        $("#gridDirectory").kendoGrid({
+            dataSource: dataSource,
+            pageable: true,
+            filterable: {
+                mode: "row"
+            },
+            height: 550,
+            width:600,
+            toolbar: ["create"],
+            columns: [
+                { field:"name", title: "Direktori " },
+                { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+            editable: "inline"
+        });
+    });
+</script>

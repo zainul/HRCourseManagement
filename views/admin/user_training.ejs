@@ -1,0 +1,152 @@
+<div id="gridUserTraining"></div>
+<script>
+    function getDropdownTraining(callback){
+        $.ajax({
+            url:'/training/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownUser(callback){
+        $.ajax({
+            url:'/user/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownCity(callback){
+        $.ajax({
+            url:'/city/get_city_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getDropdownCourseInstitute(callback){
+        $.ajax({
+            url:'/courseinstitute/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    var isregularclient = [
+        {
+            value:true,
+            text:"Regular"
+        },
+        {
+            value:false,
+            text:"Non Regular"
+        }
+    ]
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/user_training/get_user_training_kendo_format"
+                },
+                update: {
+                    url: function(options){
+                        return "/user_training/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/user_training/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/user_training",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        training:{validation: { required: true },field:"training",type: "number", defaultValue: 1 },
+                        organizer:{validation: { required: true },field:"organizer",type: "number", defaultValue: 1 },
+                        city:{validation: { required: true },field:"city",type: "number", defaultValue: 1 },
+                        start_date:{validation: { required: true },type:"date"},
+                        end_date:{validation: { required: true },type:"date"},
+                        user: { validation: { required: true },field:"user",type: "number", defaultValue: 1 },
+                        point:{ validation: { required: true },type: "number"},
+                        certificate_number:{ validation: { required: true } },
+                        certificate_date:{ validation: { required: true },type:"date"},
+                        isRegular:{ field:"isRegular", defaultValue: 1,validation: { required: true } }
+                    }
+                }
+            }
+        });
+        /*
+
+         */
+        getDropdownCourseInstitute(function(course_institute_data){
+            getDropdownTraining(function(training_data){
+                getDropdownUser(function(user_data){
+                    getDropdownCity(function(cities_data){
+                        $("#gridUserTraining").kendoGrid({
+                            dataSource: dataSource,
+                            pageable: true,
+                            filterable: {
+                                mode: "row"
+                            },
+                            scrollable: {
+                                virtual: true
+                            },
+                            groupable:true,
+                            height: 550,
+                            toolbar: ["create"],
+                            columns: [
+                                { field:"training", title: "Diklat",values: training_data, width: "400px"},
+                                { field:"organizer", title: "Penyelenggara",values: course_institute_data ,width: "220px"},
+                                { field:"city", title: "Kota",values: cities_data ,width: "220px"},
+                                { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:MM-dd-yyyy}"},
+                                { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:MM-dd-yyyy}" },
+                                { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
+                                { field:"point", title: "Nilai" ,width: "220px"},
+                                { field:"certificate_number", title: "No Sertifikat",width: "220px" },
+                                { field:"certificate_date", title: "Tanggal Sertifikat" ,width: "220px",format:"{0:MM-dd-yyyy}" },
+                                { field:"isRegular",values:isregularclient, title: "Regular", width: "220px"},
+                                { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+                            editable: "inline"
+                        });
+                    })
+                })
+            })
+        })
+    });
+</script>
