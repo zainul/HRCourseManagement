@@ -22,78 +22,139 @@
         })
     }
 
-    $(document).ready(function () {
-        dataSource = new kendo.data.DataSource({
-            transport: {
-                read:  {
-                    url: "/training/get_kendo_format"
-                },
-                update: {
-                    url: function(options){
-                        return "/training/" + options.models[0].id;
+    function initializeKendoGrid(training){
+        var element = $("#gridTraining").kendoGrid({
+            dataSource: {
+                transport: {
+                    read: "/training/get_kendo_format",
+                    update: {
+                        url: function(options){
+                            return "/training/" + options.models[0].id;
+                        },
+                        type:"PUT",
+                        dataType: "json"
                     },
-                    type:"PUT",
-                    dataType: "json"
-                },
-                destroy: {
-                    url: function(options){
-                        return "/training/" + options.models[0].id;
+                    destroy: {
+                        url: function(options){
+                            return "/training/" + options.models[0].id;
+                        },
+                        type:"DELETE",
+                        dataType: "json"
                     },
-                    type:"DELETE",
-                    dataType: "json"
+                    create: {
+                        url: "/training",
+                        type:"POST",
+                        dataType: "json"
+                    },
+                    parameterMap: function(options, operation) {
+                        if (operation !== "read" && options.models) {
+                            if(operation == "create"){
+                                delete options.models[0].id;
+                                return options.models[0];
+                            }else{
+                                return options.models[0];
+                            }
+                        }
+                    }
                 },
-                create: {
-                    url: "/training",
-                    type:"POST",
-                    dataType: "json"
-                },
-                parameterMap: function(options, operation) {
-                    if (operation !== "read" && options.models) {
-                        if(operation == "create"){
-                            delete options.models[0].id;
-                            return options.models[0];
-                        }else{
-                            return options.models[0];
+                batch: true,
+                pageSize: 20,
+                schema: {
+                    model: {
+                        id: "id",
+                        fields: {
+                            name: { validation: { required: true } },
+                            code:{ validation: { required: true } },
+                            directory:{validation: { required: true },field:"directory",type: "number", defaultValue: 1}
                         }
                     }
                 }
             },
-            batch: true,
-            pageSize: 20,
-            schema: {
-                model: {
-                    id: "id",
-                    fields: {
-                        name: { validation: { required: true } },
-                        code:{ validation: { required: true } },
-                        directory:{validation: { required: true },field:"directory",type: "number", defaultValue: 1 },
-                        user_level:{validation: { required: true },field:"user_level",type: "number", defaultValue: 1 }
-                    }
-                }
-            }
+            height: 600,
+            sortable: true,
+            pageable: true,
+            detailInit: detailInit,
+            filterable: {
+                mode: "row"
+            },
+            toolbar: ["create"],
+            columns: [
+                { field:"name", title: "Nama" },
+                { field:"code", title: "Kode Diklat" },
+                { field:"directory", title: "Direktory Diklat",values:training},
+                { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+            editable: "popup"
         });
+    }
 
-        getTrainingDirectories(function(training_data){
-            getUserLevel(function(user_level_data){
-                $("#gridTraining").kendoGrid({
-                    dataSource: dataSource,
-                    pageable: true,
-                    filterable: {
-                        mode: "row"
+    function detailInit(e) {
+        getUserLevel(function(user_level_data){
+            $("<div/>").appendTo(e.detailCell).kendoGrid({
+                dataSource: {
+                    transport: {
+                        read: "/user_level_training/get_subgrid_kendo_format?training_id="+ e.data.id,
+                        update: {
+                            url: function(options){
+                                return "/user_level_training/" + options.models[0].id;
+                            },
+                            type:"PUT",
+                            dataType: "json"
+                        },
+                        destroy: {
+                            url: function(options){
+                                return "/user_level_training/" + options.models[0].id;
+                            },
+                            type:"DELETE",
+                            dataType: "json"
+                        },
+                        create: {
+                            url: "/user_level_training",
+                            type:"POST",
+                            dataType: "json"
+                        },
+                        parameterMap: function(options, operation) {
+                            if (operation !== "read" && options.models) {
+                                if(operation == "create"){
+                                    delete options.models[0].id;
+                                    return options.models[0];
+                                }else{
+                                    return options.models[0];
+                                }
+                            }
+                        }
                     },
-                    groupable: true,
-                    height: 550,
-                    width:600,
-                    toolbar: ["create"],
-                    columns: [
-                        { field:"name", title: "Nama" },
-                        { field:"code", title: "Kode Diklat" },
-                        { field:"directory", title: "Direktory Diklat",values:user_level_data },
-                        { field:"user_level", title: "Jabatan",values: training_data },
-                        { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-                    editable: "inline"
-                });
+                    batch: true,
+                    pageSize: 10,
+                    schema: {
+                        model: {
+                            id: "id",
+                            fields: {
+                                user_level: { validation: { required: true },field:"user_level",type: "number", defaultValue: 1 },
+                                training: { validation: { required: true }, defaultValue: e.data.id },
+                            }
+                        }
+                    }
+                },
+                scrollable: false,
+                sortable: true,
+                filterable: {
+                    mode: "row"
+                },
+                groupable:true,
+                pageable: true,
+                toolbar: ["create"],
+                columns: [
+                    { field: "user_level", title:"Jabatan",width: "370px" ,values:user_level_data},
+                    { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }
+                ],
+                editable: "popup"
             });
-        })
+        })    
+    }
+    $(document).ready(function() {
+        getTrainingDirectories(function(training_data){
+            initializeKendoGrid(training_data);
+        });
     });
 </script>
+

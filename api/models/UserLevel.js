@@ -14,7 +14,7 @@ module.exports = {
       unique:true
     },
     trainings:{
-      collection: 'training',
+      collection: 'user_level_training',
       via: 'user_level'
     }
   }

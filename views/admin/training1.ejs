@@ -1,0 +1,99 @@
+<div id="gridTraining"></div>
+<script>
+    function getTrainingDirectories(callback){
+        $.ajax({
+            url:'/training_directory/get_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    function getUserLevel(callback){
+        $.ajax({
+            url:'/userlevel/get_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/training/get_kendo_format"
+                },
+                update: {
+                    url: function(options){
+                        return "/training/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/training/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/training",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        name: { validation: { required: true } },
+                        code:{ validation: { required: true } },
+                        directory:{validation: { required: true },field:"directory",type: "number", defaultValue: 1 },
+                        user_level:{validation: { required: true },field:"user_level",type: "number", defaultValue: 1 }
+                    }
+                }
+            }
+        });
+
+        getTrainingDirectories(function(training_data){
+            getUserLevel(function(user_level_data){
+                $("#gridTraining").kendoGrid({
+                    dataSource: dataSource,
+                    pageable: true,
+                    filterable: {
+                        mode: "row"
+                    },
+                    groupable: true,
+                    height: 550,
+                    width:600,
+                    toolbar: ["create"],
+                    columns: [
+                        { field:"name", title: "Nama" },
+                        { field:"code", title: "Kode Diklat" },
+                        { field:"directory", title: "Direktory Diklat",values:user_level_data },
+                        { field:"user_level", title: "Jabatan",values: training_data },
+                        { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
+                    editable: "popup"
+                });
+            });
+        })
+    });
+</script>

@@ -51,7 +51,7 @@ module.exports = {
       "INNER JOIN cities ON cities.id = user_trainings.city " +
       "INNER JOIN users ON users.id = user_trainings.`user` " +
       "WHERE user_trainings.`user`='"+req.param('userId')+"') virtualUserTraining " +
-      "RIGHT OUTER JOIN trainings t2 ON virtualUserTraining.training=t2.id " +
+      "RIGHT OUTER JOIN user_level_trainings t2 ON virtualUserTraining.training=t2.id " +
       "WHERE t2.user_level='"+req.param('userLevelId')+"'",function(err,results){
       if (err) return res.serverError(err);
       return res.ok(results);

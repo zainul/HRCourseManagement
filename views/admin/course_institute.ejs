@@ -1,16 +1,5 @@
 <div id="gridCourseInstitute"></div>
 <script>
-    function getcities(callback){
-        $.ajax({
-            url:'/city/get_city_kendo_format',
-            type:'get',
-            dataType:'json',
-            success:function(response){
-                callback(response);
-            }
-        })
-    }
-
     $(document).ready(function () {
         dataSource = new kendo.data.DataSource({
             transport: {
@@ -59,8 +48,7 @@
             }
         });
 
-        getcities(function(cities_data){
-            $("#gridCourseInstitute").kendoGrid({
+        $("#gridCourseInstitute").kendoGrid({
                 dataSource: dataSource,
                 pageable: true,
                 filterable: {
@@ -72,8 +60,7 @@
                 columns: [
                     { field:"name", title: "Nama" },
                     { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-                editable: "inline"
+                editable: "popup"
             });
-        })
     });
 </script>
