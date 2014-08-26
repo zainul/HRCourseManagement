@@ -7,7 +7,7 @@
 
 module.exports = {
   get_kendo_format:function(req,res){
-    UserLevel.query("SELECT id as 'value', name as 'text' FROM userLevels ", function(err, results) {
+    UserLevel.query("SELECT id as 'value', name as 'text' FROM userlevels ", function(err, results) {
       if (err) return res.serverError(err);
       return res.ok(results);
     });

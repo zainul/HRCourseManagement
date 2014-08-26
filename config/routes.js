@@ -37,51 +37,12 @@ module.exports.routes = {
   },
 
   // admin
-  'get /admin/city':{
-    view: 'admin/city'
-  },
-  'get /admin/area':{
-    view: 'admin/area'
-  },
-  'get /admin/grade':{
-    view: 'admin/grade'
-  },
-  'get /admin/directory':{
-    view: 'admin/directory'
-  },
-  'get /admin/unit':{
-    view: 'admin/unit'
-  },
-  'get /admin/user_level':{
-    view: 'admin/user_level'
-  },
-  'get /admin/institute':{
-    view: 'admin/course_institute'
-  },
-  'get /admin/training':{
-    view: 'admin/training'
-  },
-  'get /admin/user_training':{
-    view: 'admin/user_training'
-  },
+
   'get /admin/':{
     view: 'admin/home'
   },
-  'get /admin/user':{
-    view: 'admin/user'
-  },
-
 
   // home
-  'get /home/user_training':{
-    view: 'home/user_training'
-  },
-  'get /home/user_level_training':{
-    view: 'home/user_level_training'
-  },
-  'get /home/user_realitation':{
-    view: 'home/user_realitation'
-  }
 
   /***************************************************************************
   *                                                                          *

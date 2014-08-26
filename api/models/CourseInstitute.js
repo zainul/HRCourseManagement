@@ -6,7 +6,7 @@
 */
 
 module.exports = {
-  tableName:'courseInstitutes',
+  tableName:'courseinstitutes',
   migrate:'alter',
   attributes: {
     name:{
