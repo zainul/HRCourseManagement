@@ -10,7 +10,7 @@
             },
             height: 600,
             sortable: true,
-            pageable: true,
+            pageable: {refresh:true},
             filterable: {
                 mode: "row"
             },
@@ -42,7 +42,7 @@
                 mode: "row"
             },
             groupable:true,
-            pageable: true,
+            pageable: {refresh:true},
             columns: [
                 { field: "name", title:"Diklat",width: "370px" },
                 { field: "code", title:"Kode Diklat", width: "230px" },

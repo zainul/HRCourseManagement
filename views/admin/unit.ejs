@@ -50,7 +50,7 @@
 
         $("#gridUnit").kendoGrid({
             dataSource: dataSource,
-            pageable: true,
+            pageable: {refresh:true},
             filterable: {
                 mode: "row"
             },
@@ -60,7 +60,13 @@
             columns: [
                 { field:"name", title: "Nama Unit" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-            editable: "popup"
+            editable: "popup",
+            save:function(e){
+                setTimeout(function(){
+                    $('#gridUnit').data('kendoGrid').dataSource.read();
+                    $('#gridUnit').data('kendoGrid').refresh();
+                },500);
+            }
         });
     });
 </script>

@@ -35,5 +35,12 @@ module.exports = {
     },
     user:function(req,res){
         res.view('admin/user', {message: '', layout: null});
+    },
+    authenticate:function(req,res){
+        if(req.session.user == null){
+            res.view('/');
+        }else{
+            return true;
+        }
     }
 };

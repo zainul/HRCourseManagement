@@ -1,0 +1,72 @@
+<script>
+	$(document).ready(function() {
+        $("#txtStartDate").kendoDatePicker({
+            start: "year",
+            depth: "year",
+            format: "MMMM-yyyy"
+        });
+
+        $("#txtEndDate").kendoDatePicker({
+            start: "year",
+            depth: "year",
+            format: "MMMM-yyyy"
+        });
+
+        $('#btnShowReportForSystem').click(function(){
+        	if($("#txtStartDate").val().length==0 || $("#txtStartDate").val().length==0){
+        		alert('Mohon isi tanggal awal dan tanggal akhir')
+        	}else{
+        		$.ajax({
+	        		url:'http://localhost:81/ExportExcelServiceHRPLN/ServiceData/reportForSystem.php',
+	        		data:{
+	        			start:$("#txtStartDate").val(),
+	        			end:$('#txtEndDate').val()
+	        		},
+	        		dataType:'html',
+	        		type:'get',
+	        		success:function(response){
+	        			$('#responseGridForSystem').html(response);
+	        			$('#list-data').val(response);
+	        			$('#filename').val('Laporan Diklat untuk SYSTEM Periode '+$("#txtStartDate").val()+' - '+$('#txtEndDate').val());
+	        			$("#gridForUser").kendoGrid({
+	                        sortable: true,
+	                        scrollable: {
+	                            virtual: true
+	                        },
+	                        filterable: true,
+	                        groupable:true,
+	                        resizable: true
+	                    });
+	        		}
+	        	})
+        	}
+        })
+    });
+</script>
+<h3>Laporan Diklat Untuk System Format Excel</h3>
+<div style="width:700px;">
+	<table class="table">
+		<tr>
+			<td>
+				Mulai
+				<input id="txtStartDate" type="text" />
+			</td>
+			<td>
+				Akhir
+				<input id="txtEndDate" type="text" />
+			</td>
+			<td>
+				<input type="button" id="btnShowReportForSystem" value="Tampilkan" class="btn btn-info"/>
+			</td>
+			<td>
+				<form action="http://localhost:81/ExportExcelServiceHRPLN/" method="POST" target="_blank" id="myform">
+				  <input type="hidden" name="filename" id="filename"/>
+				  <input type="hidden" name="content" id="list-data"/>
+				  <input type="submit" id="btnExportToExcelForSystem" value="Export Ke Excel" class="btn btn-success"/>
+				</form>
+			</td>
+		</tr>
+	</table>
+</div>
+<div id="responseGridForSystem">
+</div>

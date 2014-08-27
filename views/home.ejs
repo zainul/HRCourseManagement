@@ -1,4 +1,3 @@
-<script src="/js/bootstrap.min.js"></script>
 <script>
     function loadContent(url){
         $('#content').html("<center>Mohon Tunggu Sebentar . . .</center>");
@@ -28,16 +27,24 @@
                 <li><a href="javascript:loadContent('home/user_training')">Laporan Diklat</a></li>
                 <li><a href="javascript:loadContent('home/user_level_training')">Diklat Jabatan</a></li>
                 <li><a href="javascript:loadContent('home/user_realitation')">Realisasi Diklat</a></li>
-                <!--<li class="dropdown">
-                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Sistem Diklat Terpadu<b class="caret"></b></a>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Export Excel<b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="javascript:loadContent('home/user_training')">Laporan Diklat</a></li>
-                        <li><a href="javascript:void(0)">Realisasi Diklat</a></li>
+                        <li><a href="javascript:loadContent('home/export_excel_for_user')">Untuk User</a></li>
+                        <li><a href="javascript:loadContent('home/export_excel_for_system')">Untuk System</a></li>
                     </ul>
-                </li>-->
+                </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Masuk</a></li>
+                <li>
+                    <div style="padding:6px;"><input type="text" placeholder="Username" class="form-control"/></div>
+                </li>
+                <li>
+                    <div style="padding:6px;"><input type="password" placeholder="Password" class="form-control"/></div>
+                </li>
+                <li>
+                    <div style="padding:6px;"><input type="button" value="Masuk" class="btn btn-info"/></div>
+                </li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->

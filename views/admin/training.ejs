@@ -72,7 +72,7 @@
             },
             height: 600,
             sortable: true,
-            pageable: true,
+            pageable: {refresh:true},
             detailInit: detailInit,
             filterable: {
                 mode: "row"
@@ -83,7 +83,15 @@
                 { field:"code", title: "Kode Diklat" },
                 { field:"directory", title: "Direktory Diklat",values:training},
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-            editable: "popup"
+            editable: "popup",
+            save:function(e){
+                setTimeout(function(){
+                    $('#gridTraining').data('kendoGrid').dataSource.read();
+                    $('#gridTraining').data('kendoGrid').refresh();
+                },500);
+                //var grid = $("#gridTraining").data("kendoGrid");
+                //grid.refresh();     
+            }
         });
     }
 
@@ -140,14 +148,19 @@
                 filterable: {
                     mode: "row"
                 },
-                groupable:true,
-                pageable: true,
+                pageable: {refresh:true},
                 toolbar: ["create"],
                 columns: [
                     { field: "user_level", title:"Jabatan",width: "370px" ,values:user_level_data},
                     { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }
                 ],
-                editable: "popup"
+                editable: "popup",
+                save:function(e){
+                    setTimeout(function(){
+                        $('#gridTraining').data('kendoGrid').dataSource.read();
+                        $('#gridTraining').data('kendoGrid').refresh();
+                    },500);     
+                }
             });
         })    
     }

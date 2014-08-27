@@ -109,13 +109,11 @@
                     getDropdownUserLevel(function(user_level_data){
                         $("#gridUser").kendoGrid({
                             dataSource: dataSource,
-                            pageable: true,
+                            pageable: {refresh:true},
                             filterable: {
                                 mode: "row"
                             },
-                            scrollable: {
-                                virtual: true
-                            },
+                            scrollable: true,
                             groupable:true,
                             height: 550,
                             detailInit: detailInit,
@@ -168,7 +166,7 @@
                 sortable: true,
                 filterable: true,
                 groupable:true,
-                pageable: true,
+                pageable: {refresh:true},
                 columns: [
                     { field: "status", title:"Realisasi",values: statusclient,width: "370px" },
                     { field: "username", title:"Nama",width: "370px" },

@@ -106,7 +106,7 @@
                     getDropdownUserLevel(function(user_level_data){
                         $("#gridUser").kendoGrid({
                             dataSource: dataSource,
-                            pageable: true,
+                            pageable: {refresh:true},
                             filterable: {
                                 mode: "row"
                             },
@@ -125,7 +125,13 @@
                                 { field:"area", title: "Area" ,width: "220px",values:area_data},
                                 { field:"grade", title: "Grade" ,width: "220px",values:grade_data},
                                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-                            editable: "popup"
+                            editable: "popup",
+                            save:function(e){
+                                setTimeout(function(){
+                                    $('#gridUser').data('kendoGrid').dataSource.read();
+                                    $('#gridUser').data('kendoGrid').refresh();
+                                },500);
+                            }
                         });
                     })
                 })

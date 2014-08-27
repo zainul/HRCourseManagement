@@ -1,4 +1,4 @@
-<div id="gridUserTraining"></div>
+<div id="gridUserTraining"></div><br/>
 <script>
     function getDropdownTraining(callback){
         $.ajax({
@@ -98,7 +98,7 @@
                 getDropdownUser(function(user_data){
                     $("#gridUserTraining").kendoGrid({
                         dataSource: dataSource,
-                        pageable: true,
+                        pageable: {refresh:true},
                         filterable: {
                             mode: "row"
                         },

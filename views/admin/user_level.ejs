@@ -50,7 +50,7 @@
 
         $("#gridUserLevel").kendoGrid({
             dataSource: dataSource,
-            pageable: true,
+            pageable: {refresh:true},
             filterable: {
                 mode: "row"
             },
@@ -60,7 +60,13 @@
             columns: [
                 { field:"name", title: "Nama Jabatan" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-            editable: "popup"
+            editable: "popup",
+            save:function(e){
+                setTimeout(function(){
+                    $('#gridUserLevel').data('kendoGrid').dataSource.read();
+                    $('#gridUserLevel').data('kendoGrid').refresh();
+                },500);
+            }
         });
     });
 </script>

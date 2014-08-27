@@ -50,7 +50,7 @@
 
         $("#gridDirectory").kendoGrid({
             dataSource: dataSource,
-            pageable: true,
+            pageable: {refresh:true},
             filterable: {
                 mode: "row"
             },
@@ -60,7 +60,13 @@
             columns: [
                 { field:"name", title: "Direktori " },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-            editable: "popup"
+            editable: "popup",
+            save:function(e){
+                setTimeout(function(){
+                    $('#gridDirectory').data('kendoGrid').dataSource.read();
+                    $('#gridDirectory').data('kendoGrid').refresh();
+                },500);
+            }
         });
     });
 </script>

@@ -34,6 +34,23 @@ module.exports = {
       if (err) return res.serverError(err);
       return res.ok(results);
     });
+  },
+  login:function(req,res){
+    User.findOneByNip(req.body.nip,function (err, user) {
+      if (err) res.json({ error: 'DB error' }, 500);
+
+      if(user){
+        if(req.body.password == user.password){
+          req.session.user = user.id;
+          res.json(user);
+        }else{
+          if (req.session.user) req.session.user = null;
+          res.json({ error: 'Invalid password' }, 400);
+        }
+      }else {
+        res.json({ error: 'User not found' }, 404);
+      }
+    });
   }
 };
 

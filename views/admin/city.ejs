@@ -50,7 +50,7 @@
 
         $("#gridCity").kendoGrid({
             dataSource: dataSource,
-            pageable: true,
+            pageable: {refresh:true},
             filterable: {
                 mode: "row"
             },
@@ -60,7 +60,13 @@
             columns: [
                 { field:"name", title: "Nama Kota" },
                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-            editable: "popup"
+            editable: "popup",
+            save:function(e){
+                setTimeout(function(){
+                    $('#gridCity').data('kendoGrid').dataSource.read();
+                    $('#gridCity').data('kendoGrid').refresh();
+                },500);
+            }
         });
     });
 </script>

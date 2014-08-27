@@ -120,7 +120,7 @@
                     getDropdownCity(function(cities_data){
                         $("#gridUserTraining").kendoGrid({
                             dataSource: dataSource,
-                            pageable: true,
+                            pageable: {refresh:true},
                             filterable: {
                                 mode: "row"
                             },
@@ -142,7 +142,13 @@
                                 { field:"certificate_date", title: "Tanggal Sertifikat" ,width: "220px",format:"{0:MM-dd-yyyy}" },
                                 { field:"isRegular",values:isregularclient, title: "Regular", width: "220px"},
                                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
-                            editable: "popup"
+                            editable: "popup",
+                            save:function(e){
+                                setTimeout(function(){
+                                    $('#gridUserTraining').data('kendoGrid').dataSource.read();
+                                    $('#gridUserTraining').data('kendoGrid').refresh();
+                                },500);
+                            }
                         });
                     })
                 })
