@@ -36,11 +36,12 @@ module.exports = {
     });
   },
   authenticate:function(req,res){
-    User.findOneByNip(req.body.nip,function (err, user) {
+
+    User.query("SELECT * FROM users WHERE nip='"+req.body.nip+"' ",function(err,user){
       if (err) res.json({ error: 'DB error' }, 500);
 
       if(user){
-        if(req.body.password == user.password){
+        if(req.body.password == user[0].password){
           req.session.user = user.id;
           res.json(user,200);
         }else{
@@ -50,7 +51,10 @@ module.exports = {
       }else {
         res.json({ error: 'User not found',is_error:true }, 404);
       }
-    });
+    })
+    //User.findOneByNip(req.body.nip,function (err, user) {
+      
+    //});
   }
 };
 
