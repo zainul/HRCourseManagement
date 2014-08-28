@@ -35,20 +35,20 @@ module.exports = {
       return res.ok(results);
     });
   },
-  login:function(req,res){
+  authenticate:function(req,res){
     User.findOneByNip(req.body.nip,function (err, user) {
       if (err) res.json({ error: 'DB error' }, 500);
 
       if(user){
         if(req.body.password == user.password){
           req.session.user = user.id;
-          res.json(user);
+          res.json(user,200);
         }else{
           if (req.session.user) req.session.user = null;
-          res.json({ error: 'Invalid password' }, 400);
+          res.json({ error: 'Invalid password',is_error:true }, 400);
         }
       }else {
-        res.json({ error: 'User not found' }, 404);
+        res.json({ error: 'User not found',is_error:true }, 404);
       }
     });
   }

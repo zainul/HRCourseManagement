@@ -6,6 +6,13 @@
  */
 
 module.exports = {
+    index:function(req,res){
+        if(req.session.user != null){
+            res.view('admin/home');
+        }else{
+            res.redirect('/');
+        }
+    },
     city:function(req,res){
         res.view('admin/city', {message: '', layout: null});
     },
@@ -36,9 +43,13 @@ module.exports = {
     user:function(req,res){
         res.view('admin/user', {message: '', layout: null});
     },
+    signoff:function(req,res){
+        req.session.user = null;
+        res.redirect('/');
+    },
     authenticate:function(req,res){
         if(req.session.user == null){
-            res.view('/');
+            return false;
         }else{
             return true;
         }

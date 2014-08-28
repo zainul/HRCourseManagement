@@ -38,9 +38,9 @@ module.exports.routes = {
 
   // admin
 
-  'get /admin/':{
-    view: 'admin/home'
-  },
+  //'get /admin/':{
+  //  view: 'admin/home'
+  //},
 
   // home
 

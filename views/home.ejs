@@ -1,10 +1,40 @@
+<style>
+    .navbar-default {
+        background:url('/images/bg-header.png');
+        background-repeat: repeat;
+        border-color: #e7e7e7;
+    }
+</style>
 <script>
     function loadContent(url){
         $('#content').html("<center>Mohon Tunggu Sebentar . . .</center>");
         $('#content').load(url);
     }
     $(document).ready(function () {
-
+       
+        $('#btnLogin').click(function(){
+             if($('#txtUsername').val().length==0 || $('#txtPassword').val().length==0){
+                alert('Maaf anda harus mengisi nip dan password');
+            }else{
+                $.ajax({
+                url:'/user/authenticate',
+                data:{
+                    nip:$('#txtUsername').val(),
+                    password:$('#txtPassword').val()
+                },
+                type:'post',
+                success:function(response){
+                    window.location.href="/admin/";
+                },
+                error:function(response){
+                    var msg = JSON.parse(response.responseText);
+                    alert(msg.error);
+                }
+            })
+            }
+            
+        })
+        
     });
 </script>
 <nav class="navbar navbar-default nav-on-top" role="navigation">
@@ -37,13 +67,13 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li>
-                    <div style="padding:6px;"><input type="text" placeholder="Username" class="form-control"/></div>
+                    <div style="padding:6px;"><input type="text" id="txtUsername" placeholder="NIP" class="form-control"/></div>
                 </li>
                 <li>
-                    <div style="padding:6px;"><input type="password" placeholder="Password" class="form-control"/></div>
+                    <div style="padding:6px;"><input type="password" id="txtPassword" placeholder="Password" class="form-control"/></div>
                 </li>
                 <li>
-                    <div style="padding:6px;"><input type="button" value="Masuk" class="btn btn-info"/></div>
+                    <div style="padding:6px;"><input type="button" id="btnLogin" value="Masuk" class="btn btn-info"/></div>
                 </li>
             </ul>
         </div><!-- /.navbar-collapse -->
