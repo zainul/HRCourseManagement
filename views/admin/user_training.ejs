@@ -1,4 +1,5 @@
 <div id="gridUserTraining"></div>
+
 <script>
     function getDropdownTraining(callback){
         $.ajax({
@@ -134,8 +135,8 @@
                                 { field:"training", title: "Diklat",values: training_data, width: "400px"},
                                 { field:"organizer", title: "Penyelenggara",values: course_institute_data ,width: "220px"},
                                 { field:"city", title: "Kota",values: cities_data ,width: "220px"},
-                                { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:MM-dd-yyyy}"},
-                                { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:MM-dd-yyyy}" },
+                                { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:dd-MM-yyyy}"},
+                                { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:dd-MM-yyyy}" },
                                 { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
                                 { field:"point", title: "Nilai" ,width: "220px"},
                                 { field:"certificate_number", title: "No Sertifikat",width: "220px" },

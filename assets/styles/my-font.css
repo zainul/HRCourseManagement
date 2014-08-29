@@ -2,3 +2,19 @@
 html{
     font: 75% Arial, Helvetica, sans-serif !important;
 }
+
+.k-edit-form-container {
+    padding: 20px;
+}
+div.k-edit-field .k-datepicker {
+    width: 20.4em;
+}
+div.k-edit-field .k-textbox {
+    width: 20.4em;
+}
+div.k-edit-field .k-numerictextbox{
+    width: 20.4em;
+}
+div.k-edit-field .k-dropdown{
+    width: 20.4em;
+}

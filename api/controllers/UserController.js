@@ -42,7 +42,7 @@ module.exports = {
 
       if(user){
         if(req.body.password == user[0].password){
-          req.session.user = user.id;
+          req.session.user = user[0].id;
           res.json(user,200);
         }else{
           if (req.session.user) req.session.user = null;
