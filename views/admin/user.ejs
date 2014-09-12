@@ -89,6 +89,7 @@
                         name:{validation: { required: true }},
                         password:{validation: { required: true }},
                         nip:{validation: { required: true }},
+                        employee_number:{validation: { required: true }},
                         user_level:{validation: { required: true },field:"user_level",type: "number", defaultValue: 1 },
                         unit:{validation: { required: true },field:"unit",type: "number", defaultValue: 1 },
                         area: { validation: { required: true },field:"area",type: "number", defaultValue: 1 },
@@ -116,13 +117,26 @@
                             groupable:true,
                             height: 550,
                             toolbar: ["create"],
+                            edit:function(e){
+                                if (e.model.isNew()) {
+                                    $("select").each(function () {
+                                        var ddl = $(this).data("kendoDropDownList");
+                                        if (ddl){
+                                            ddl.options.optionLabel = " - Pilih - ";
+                                            ddl.refresh();
+                                            ddl.value("");
+                                        }
+                                    });
+                                }
+                            },
                             columns: [
                                 { field:"name", title: "Nama", width: "400px"},
                                 { field:"password", title: "Password",width: "220px"},
                                 { field:"nip", title: "NIP",width: "220px"},
+                                { field:"employee_number",title:"No Pegawai",width:"220px"},
                                 { field:"user_level", title: "Jabatan",values:user_level_data ,width: "220px"},
                                 { field:"unit", title: "Unit" ,width: "220px",values:unit_data },
-                                { field:"area", title: "Area" ,width: "220px",values:area_data},
+                                { field:"area", title: "Bidang" ,width: "220px",values:area_data},
                                 { field:"grade", title: "Grade" ,width: "220px",values:grade_data},
                                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
                             editable: "popup",

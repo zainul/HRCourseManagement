@@ -78,6 +78,18 @@
                 mode: "row"
             },
             toolbar: ["create"],
+            edit:function(e){
+                if (e.model.isNew()) {
+                    $("select").each(function () {
+                        var ddl = $(this).data("kendoDropDownList");
+                        if (ddl){
+                            ddl.options.optionLabel = " - Pilih - ";
+                            ddl.refresh();
+                            ddl.value("");
+                        }
+                    });
+                }
+            },
             columns: [
                 { field:"name", title: "Nama" },
                 { field:"code", title: "Kode Diklat" },

@@ -13,6 +13,9 @@ module.exports = {
             res.redirect('/');
         }
     },
+    complaint:function(req,res){
+        res.view('admin/complaint', {message: '', layout: null});
+    },
     city:function(req,res){
         res.view('admin/city', {message: '', layout: null});
     },

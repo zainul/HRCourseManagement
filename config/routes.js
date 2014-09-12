@@ -35,6 +35,12 @@ module.exports.routes = {
   '/': {
     view: 'home'
   },
+  '/superadmin':{
+      view:'superadmin/home'
+  },
+  '/usercomplaint':{
+    view:'user/usercomplaint'
+  }
 
   // admin
 

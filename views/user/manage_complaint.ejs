@@ -1,0 +1,144 @@
+<style>
+    .navbar-default {
+        background:url('/images/bg-header.png');
+        background-repeat: repeat;
+        border-color: #e7e7e7;
+    }
+    body{
+        background:url('/images/background.png');
+        background-repeat: repeat;
+    }
+</style>
+<nav class="navbar navbar-default nav-on-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#" id="lblHeaderId"></a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li><img src="/images/icon-pln.jpg" style="width: 40px; height: 50px;"/></li>
+                <li class="active"><a href="javascript:void(0)">Sistem Diklat Terpadu</a></li>
+             </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/admin/signoff">Keluar</a></li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="container-fluid">
+    <div id="content">
+        <div id="gridUserComplaint"></div>
+
+        <script>
+            function getDropdownUser(callback){
+                $.ajax({
+                    url:'/user/get_dropdown_kendo_format',
+                    type:'get',
+                    dataType:'json',
+                    success:function(response){
+                        callback(response);
+                    }
+                })
+            }
+            var status_complaint = [
+                {
+                    value:0,
+                    text:'Proses'
+                },
+                {
+                    value:1,
+                    text:'Selesai'
+                }
+            ]
+
+            $(document).ready(function () {
+                dataSource = new kendo.data.DataSource({
+                    transport: {
+                        read:  {
+                            url: "/complaint?user="+ <%= user %>
+                        },
+                        update: {
+                            url:"/complaint/update_by_user_login",
+                            type:"POST",
+                            dataType: "json"
+                        },
+                        destroy: {
+                            url: "/complaint/delete_by_user_login",
+                            type:"POST",
+                            dataType: "json"
+                        },
+                        create: {
+                            url: "/complaint/insert_by_user_login",
+                            type:"POST",
+                            dataType: "json"
+                        },
+                        parameterMap: function(options, operation) {
+                            if (operation !== "read" && options.models) {
+                                return options.models[0];
+                            }
+                        }
+                    },
+                    batch: true,
+                    pageSize: 20,
+                    schema: {
+                        model: {
+                            id: "id",
+                            fields: {
+                                user: { validation: { required: true },field:"id",type: "number", defaultValue: 1},
+                                subject:{validation: { required: true }},
+                                message:{validation: { required: true }},
+                                status:{validation: { required: true },field:"status",type: "number", defaultValue: 0}
+                                //createdAt:{validation: { required: true },field:"createdAt",type: "date"}
+                            }
+                        }
+                    }
+                });
+
+                getDropdownUser(function(user_data){
+                    $("#gridUserComplaint").kendoGrid({
+                        dataSource: dataSource,
+                        pageable: {refresh:true},
+                        filterable: {
+                            mode: "row"
+                        },
+                        scrollable: {
+                            virtual: true
+                        },
+                        groupable:true,
+                        height: 550,
+                        toolbar: ["create"],
+                        edit:function(e){
+                        },
+                        columns: [
+                            { field:"user", title: "Nama Pengguna", values:user_data ,width: "220px"},
+                            { field:"subject", title: "Judul Pesan" ,width: "320px"},
+                            { field:"message", title: "Pesan" ,width: "620px"},
+                            { field:"status", title: "Status",values:status_complaint, width: "200px"},
+                            //{ field:"createdAt", title: "Tanggal",format:"{0:MM-dd-yyyy HH:mm:ss}", width: "220px"},
+                            { command: ["edit","destroy"], title: "&nbsp;", width: "170px" }],
+                        editable: "inline",
+                        save:function(e){
+                            setTimeout(function(){
+                                $('#gridUserComplaint').data('kendoGrid').dataSource.read();
+                                $('#gridUserComplaint').data('kendoGrid').refresh();
+                            },500);
+                        }
+                    });
+
+                    var grid = $("#gridUserComplaint").data("kendoGrid");
+                    grid.hideColumn(0);
+
+                })
+            });
+        </script>
+    </div>
+</div>

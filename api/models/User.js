@@ -15,6 +15,10 @@ module.exports = {
       type:'string',
       unique:true
     },
+    employee_number:{
+        type:'string',
+        unique:true
+    },
     user_level:{
       model:'userLevel'
     },

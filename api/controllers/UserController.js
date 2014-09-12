@@ -36,16 +36,15 @@ module.exports = {
     });
   },
   authenticate:function(req,res){
-
     User.query("SELECT * FROM users WHERE nip='"+req.body.nip+"' ",function(err,user){
       if (err) res.json({ error: 'DB error' }, 500);
 
       if(user){
         if(req.body.password == user[0].password){
-          req.session.user = user[0].id;
+          req.session.user_complaint = user[0].id;
           res.json(user,200);
         }else{
-          if (req.session.user) req.session.user = null;
+          if (req.session.user_complaint) req.session.user_complaint = null;
           res.json({ error: 'Invalid password',is_error:true }, 400);
         }
       }else {
@@ -54,6 +53,26 @@ module.exports = {
     })
     //User.findOneByNip(req.body.nip,function (err, user) {
       
+    //});
+  },
+  authenticate_super_admin:function(req,res){
+    User.query("SELECT * FROM settings WHERE username='"+req.body.username+"' ",function(err,user){
+        if (err) res.json({ error: 'DB error' }, 500);
+
+        if(user){
+            if(req.body.password == user[0].password){
+                req.session.user = user[0].username;
+                res.json(user,200);
+            }else{
+                if (req.session.user) req.session.user = null;
+                res.json({ error: 'Invalid password',is_error:true }, 400);
+            }
+        }else {
+            res.json({ error: 'User not found',is_error:true }, 404);
+        }
+    })
+    //User.findOneByNip(req.body.nip,function (err, user) {
+
     //});
   }
 };

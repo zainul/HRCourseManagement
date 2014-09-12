@@ -1,0 +1,54 @@
+<style>
+    .navbar-default {
+        background:url('/images/bg-header.png');
+        background-repeat: repeat;
+        border-color: #e7e7e7;
+    }
+    body{
+        background:url('/images/background.png');
+        background-repeat: repeat;
+    }
+</style>
+<script>
+    $(document).ready(function () {
+        $('#btnLogin').click(function(){
+            if($('#txtUsername').val().length==0 || $('#txtPassword').val().length==0){
+                alert('Maaf anda harus mengisi nip dan password');
+            }else{
+                $.ajax({
+                    url:'/user/authenticate_super_admin',
+                    data:{
+                        username:$('#txtUsername').val(),
+                        password:$('#txtPassword').val()
+                    },
+                    type:'post',
+                    success:function(response){
+                        window.location.href="/admin/";
+                    },
+                    error:function(response){
+                        var msg = JSON.parse(response.responseText);
+                        alert(msg.error);
+                    }
+                })
+            }
+
+        })
+
+    });
+</script>
+<div class="container-fluid">
+    <div id="content">
+        <center>
+            <div class="row" style="margin-top: 100px;">
+                <div class="col-md-4"></div>
+                <div class="col-md-3" style="background: rgb(247, 247, 247); padding: 20px; border: solid 1px #777a79; border-radius: 5px;">
+                    <h3>Login Admin</h3>
+                    <input type="text" id="txtUsername" class="form-control" placeholder="Username"/><br/>
+                    <input type="password" id="txtPassword" class="form-control" placeholder="Password"/><br/>
+                    <input type="button" id="btnLogin" class="btn btn-info" class="form-control" value="Login"/>
+                </div>
+                <div class="col-md-4"></div>
+            </div>
+        </center>
+    </div>
+</div>

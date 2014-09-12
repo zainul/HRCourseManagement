@@ -1,0 +1,117 @@
+<div id="gridUserComplaint"></div>
+
+<script>
+    function getDropdownUser(callback){
+        $.ajax({
+            url:'/user/get_dropdown_kendo_format',
+            type:'get',
+            dataType:'json',
+            success:function(response){
+                callback(response);
+            }
+        })
+    }
+    var status_complaint = [
+        {
+            value:0,
+            text:'Proses'
+        },
+        {
+            value:1,
+            text:'Selesai'
+        }
+    ]
+
+    $(document).ready(function () {
+        dataSource = new kendo.data.DataSource({
+            transport: {
+                read:  {
+                    url: "/complaint/"
+                },
+                update: {
+                    url: function(options){
+                        return "/complaint/" + options.models[0].id;
+                    },
+                    type:"PUT",
+                    dataType: "json"
+                },
+                destroy: {
+                    url: function(options){
+                        return "/complaint/" + options.models[0].id;
+                    },
+                    type:"DELETE",
+                    dataType: "json"
+                },
+                create: {
+                    url: "/complaint",
+                    type:"POST",
+                    dataType: "json"
+                },
+                parameterMap: function(options, operation) {
+                    if (operation !== "read" && options.models) {
+                        if(operation == "create"){
+                            delete options.models[0].id;
+                            return options.models[0];
+                        }else{
+                            return options.models[0];
+                        }
+                    }
+                }
+            },
+            batch: true,
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "id",
+                    fields: {
+                        user: { validation: { required: true },field:"user.id",type: "number", defaultValue: 1},
+                        subject:{validation: { required: true }},
+                        message:{validation: { required: true }},
+                        status:{validation: { required: true },field:"status",type: "number", defaultValue: 0},
+                        //createdAt:{validation: { required: true },field:"createdAt",type: "date"}
+                    }
+                }
+            }
+        });
+        /*
+
+         */
+        getDropdownUser(function(user_data){
+            $("#gridUserComplaint").kendoGrid({
+                dataSource: dataSource,
+                pageable: {refresh:true},
+                filterable: {
+                    mode: "row"
+                },
+                scrollable: {
+                    virtual: true
+                },
+                groupable:true,
+                height: 550,
+                edit:function(e){
+                    $('input[name *= "name"]').attr("disabled", true);
+                    $('input[name *= "subject"]').attr("disabled", true);
+                    $('input[name *= "message"]').attr("disabled", true);
+                    //$('input[name *= "createdAt"]').attr("disabled", true);
+                },
+                columns: [
+                    { field:"user", title: "Nama Pengguna", values:user_data ,width: "220px"},
+                    { field:"subject", title: "Judul Pesan" ,width: "220px"},
+                    { field:"message", title: "Pesan" ,width: "220px"},
+                    { field:"status", title: "Status",values:status_complaint, width: "220px"},
+                    //{ field:"createdAt", title: "Tanggal",format:"{0:MM-dd-yyyy HH:mm:ss}", width: "220px"},
+                    { command: ["edit"], title: "&nbsp;", width: "200px" }],
+                editable: "popup",
+                save:function(e){
+                    setTimeout(function(){
+                        $('#gridUserComplaint').data('kendoGrid').dataSource.read();
+                        $('#gridUserComplaint').data('kendoGrid').refresh();
+                    },500);
+                }
+            });
+        })
+
+
+
+    });
+</script>
