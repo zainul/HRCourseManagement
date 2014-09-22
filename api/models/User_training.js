@@ -26,6 +26,7 @@ module.exports = {
     point:'float',
     certificate_number:'string',
     certificate_date:'date',
+    rank:'string',
     isRegular:'boolean'
   }
 };

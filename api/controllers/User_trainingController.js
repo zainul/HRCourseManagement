@@ -17,12 +17,13 @@ module.exports = {
       "user_trainings.point," +
       "user_trainings.certificate_number," +
       "user_trainings.certificate_date," +
+      "user_trainings.rank," +
       "CASE user_trainings.isRegular " +
       "WHEN user_trainings.isRegular=1 THEN 'true' " +
       "ELSE 'false' " +
       "END  as 'isRegular', " +
       "user_trainings.id " +
-      "FROM user_trainings", function(err, results) {
+      "FROM user_trainings  JOIN users ON user_trainings.`user`=users.id", function(err, results) {
       if (err) return res.serverError(err);
       return res.ok(results);
     });

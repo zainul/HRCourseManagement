@@ -66,6 +66,11 @@
                         read:  {
                             url: "/complaint?user="+ <%= user %>
                         },
+                        create: {
+                            url: "/complaint/insert_by_user_login",
+                            type:"POST",
+                            dataType: "json"
+                        },
                         update: {
                             url:"/complaint/update_by_user_login",
                             type:"POST",
@@ -76,11 +81,7 @@
                             type:"POST",
                             dataType: "json"
                         },
-                        create: {
-                            url: "/complaint/insert_by_user_login",
-                            type:"POST",
-                            dataType: "json"
-                        },
+                        
                         parameterMap: function(options, operation) {
                             if (operation !== "read" && options.models) {
                                 return options.models[0];
