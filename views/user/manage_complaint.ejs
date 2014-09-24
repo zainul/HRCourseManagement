@@ -9,6 +9,7 @@
         background-repeat: repeat;
     }
 </style>
+
 <nav class="navbar navbar-default nav-on-top" role="navigation">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -36,9 +37,61 @@
 </nav>
 <div class="container-fluid">
     <div id="content">
-        <div id="gridUserComplaint"></div>
+
+        <ul class="nav nav-tabs" role="tablist">
+          <li><a href="#complain" role="tab" data-toggle="tab">Input Komplain</a></li>
+          <li class="active"><a href="#yourcomplain" role="tab" data-toggle="tab">Daftar Komplain Anda</a></li>
+        </ul>
+
+        <div class="tab-content">
+          <div class="tab-pane" id="complain">
+                <div style="padding:15px;">
+                    <div id="inputComplaint">
+                        <fieldset>
+                            Judul
+                            <input type="text" id="txtTitle" class="form-control" />
+                        </fieldset>
+                        <fieldset>
+                            Pesan Komplain
+                            <textarea id="txtMessage" class="form-control" ></textarea>
+                        </fieldset>
+                        <fieldset>
+                            <br/>
+                            <input type="button" class="btn btn-info" value="Kirim" onclick="inputComplaint()" />
+                        </fieldset>
+                    </div>
+                </div>
+          </div>
+          <div class="tab-pane active" id="yourcomplain">
+                <div style="padding:15px;">
+                    <div id="gridUserComplaint"></div>
+                </div>
+          </div>
+        </div>
 
         <script>
+            function inputComplaint(){
+                if($('#txtTitle').val().length==0 || $('#txtMessage').val().length==0){
+                    alert("Mohon Lengkapi data komplain anda");
+                }else{
+                    $.ajax({
+                        url:'/complaint/insert_by_user_login',
+                        data:{
+                            subject:$('#txtMessage').val(),
+                            message:$('#txtTitle').val()
+                        },
+                        type:'post',
+                        dataType:'json',
+                        success:function(response){
+                            console.log(response);
+                            $('#gridUserComplaint').data('kendoGrid').dataSource.read();
+                            $('#gridUserComplaint').data('kendoGrid').refresh();
+                        }
+                    })
+                }
+            }
+
+
             function getDropdownUser(callback){
                 $.ajax({
                     url:'/user/get_dropdown_kendo_format',
@@ -67,7 +120,7 @@
                             url: "/complaint?user="+ <%= user %>
                         },
                         create: {
-                            url: "/complaint/insert_by_user_login",
+                            url: "/complaint/update_by_user_login",
                             type:"POST",
                             dataType: "json"
                         },
@@ -116,7 +169,6 @@
                         },
                         groupable:true,
                         height: 550,
-                        toolbar: ["create"],
                         edit:function(e){
                         },
                         columns: [
