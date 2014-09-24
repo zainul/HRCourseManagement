@@ -83,9 +83,15 @@
                         type:'post',
                         dataType:'json',
                         success:function(response){
-                            console.log(response);
-                            $('#gridUserComplaint').data('kendoGrid').dataSource.read();
-                            $('#gridUserComplaint').data('kendoGrid').refresh();
+                            if(response.affectedRows>0){
+                                alert('Komplain anda telah terkirim')
+                                $('#gridUserComplaint').data('kendoGrid').dataSource.read();
+                                $('#gridUserComplaint').data('kendoGrid').refresh();
+                                $('#txtMessage').val('')
+                                $('#txtTitle').val('')
+                            }else{
+                                alert("Gagal menambahkan komplain");
+                            }
                         }
                     })
                 }
