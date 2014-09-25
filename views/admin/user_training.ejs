@@ -45,6 +45,12 @@
         })
     }
 
+    function getTimeValidation(date1, date2){
+        var d1 = new Date(date1);
+        var d2 = new Date(date2);
+        return d1.getTime()>d2.getTime();
+    }
+
     var isregularclient = [
         {
             value:true,
@@ -57,6 +63,7 @@
     ]
 
     $(document).ready(function () {
+        var endDate;
         dataSource = new kendo.data.DataSource({
             transport: {
                 read:  {
@@ -102,11 +109,32 @@
                         organizer:{validation: { required: true },field:"organizer",type: "number", defaultValue: 1 },
                         city:{validation: { required: true },field:"city",type: "number", defaultValue: 1 },
                         start_date:{validation: { required: true },type:"date"},
-                        end_date:{validation: { required: true },type:"date"},
+                        end_date:{validation: { required: true,
+                            enddatevalidation: function (input) {
+                                if (input.is("[name='end_date']") && input.val() != "") {
+                                    input.attr("data-enddatevalidation-msg", "Tanggal akhir harus lebih besar atau sama dengan dari tanggal awal");
+                                    return getTimeValidation(input.val(),$('input[name="start_date"]').val());
+                                }
+
+                                return true;
+                            }
+                        },type:"date"},
                         user: { validation: { required: true },field:"user",type: "number", defaultValue: 1 },
                         point:{ validation: { required: true },type: "number"},
                         certificate_number:{ validation: { required: true } },
-                        certificate_date:{ validation: { required: true },type:"date"},
+                        certificate_date:{ 
+                            validation: { 
+                                required: true,
+                                productnamevalidation: function (input) {
+                                    if (input.is("[name='certificate_date']") && input.val() != "") {
+                                        input.attr("data-productnamevalidation-msg", "Tanggal sertifikat harus lebih besar atau sama dengan dari tanggal akhir");
+                                        return getTimeValidation(input.val(),$('input[name="end_date"]').val());
+                                    }
+
+                                    return true;
+                                }
+                            },
+                            type:"date"},
                         rank:{ validation: { required: true }},
                         isRegular:{ field:"isRegular", defaultValue: 1,validation: { required: true } }
                     }
@@ -116,6 +144,8 @@
         /*
 
          */
+
+
         getDropdownCourseInstitute(function(course_institute_data){
             getDropdownTraining(function(training_data){
                 getDropdownUser(function(user_data){
@@ -148,8 +178,8 @@
                                 { field:"training", title: "Diklat",values: training_data, width: "400px"},
                                 { field:"organizer", title: "Penyelenggara",values: course_institute_data ,width: "220px"},
                                 { field:"city", title: "Kota",values: cities_data ,width: "220px"},
-                                { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:dd-MM-yyyy}"},
-                                { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:dd-MM-yyyy}"},
+                                { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:MM-dd-yyyy}"},
+                                { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:MM-dd-yyyy}"},
                                 { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
                                 { field:"point", title: "Nilai" ,width: "220px"},
                                 { field:"certificate_number", title: "No Sertifikat",width: "220px" },

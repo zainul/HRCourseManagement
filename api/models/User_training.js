@@ -31,3 +31,21 @@ module.exports = {
   }
 };
 
+/*module.exports = {
+  tableName:'user_trainings',
+  migrate:'alter',
+  attributes: {
+    training:'string',
+    organizer:'string',
+    city:'string',
+    start_date:'date',
+    end_date:'date',
+    user:'string',
+    point:'float',
+    certificate_number:'string',
+    certificate_date:'date',
+    rank:'string',
+    isRegular:'boolean'
+  }
+};*/
+
