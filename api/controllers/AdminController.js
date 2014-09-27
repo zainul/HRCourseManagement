@@ -43,6 +43,9 @@ module.exports = {
     user_training:function(req,res){
         res.view('admin/user_training', {message: '', layout: null});
     },
+    user_training_nonreg:function(req,res){
+        res.view('admin/user_training_nonreg', {message: '', layout: null});
+    },
     user:function(req,res){
         res.view('admin/user', {message: '', layout: null});
     },

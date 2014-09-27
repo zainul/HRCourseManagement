@@ -162,6 +162,18 @@
                 },
                 pageable: {refresh:true},
                 toolbar: ["create"],
+                edit:function(e){
+                                if (e.model.isNew()) {
+                                    $("select").each(function () {
+                                        var ddl = $(this).data("kendoDropDownList");
+                                        if (ddl){
+                                            ddl.options.optionLabel = " - Pilih - ";
+                                            ddl.refresh();
+                                            ddl.value("");
+                                        }
+                                    });
+                                }
+                            },
                 columns: [
                     { field: "user_level", title:"Jabatan",width: "370px" ,values:user_level_data},
                     { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }

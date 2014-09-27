@@ -33,17 +33,6 @@
         })
     }
 
-    function getDropdownCourseInstitute(callback){
-        $.ajax({
-            url:'/courseinstitute/get_dropdown_kendo_format',
-            type:'get',
-            dataType:'json',
-            success:function(response){
-                callback(response);
-            }
-        })
-    }
-
     var isregularclient = [
         {
             value:true,
@@ -59,7 +48,7 @@
         dataSource = new kendo.data.DataSource({
             transport: {
                 read:  {
-                    url: "/user_training/get_user_training_kendo_format"
+                    url: "/user_training/get_user_training_union_nonreg"
                 },
                 parameterMap: function(options, operation) {
                     if (operation !== "read" && options.models) {
@@ -78,7 +67,7 @@
                     id: "id",
                     fields: {
                         training:{validation: { required: true },field:"training",type: "number", defaultValue: 1 },
-                        organizer:{validation: { required: true },field:"organizer",type: "number", defaultValue: 1 },
+                        organizer:{validation: { required: true } },
                         start_date:{validation: { required: true },type:"date"},
                         end_date:{validation: { required: true },type:"date"},
                         user: { validation: { required: true },field:"user",type: "number", defaultValue: 1 },
@@ -93,8 +82,7 @@
         /*
 
          */
-        getDropdownCourseInstitute(function(course_institute_data){
-            getDropdownTraining(function(training_data){
+         getDropdownTraining(function(training_data){
                 getDropdownUser(function(user_data){
                     $("#gridUserTraining").kendoGrid({
                         dataSource: dataSource,
@@ -109,10 +97,10 @@
                         height: 550,
                         columns: [
                             { field:"training", title: "Diklat",values: training_data, width: "400px"},
-                            { field:"organizer", title: "Penyelenggara",values: course_institute_data ,width: "220px"},
+                            { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
+                            { field:"organizer", title: "Penyelenggara",width: "220px"},
                             { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:dd-MM-yyyy}"},
                             { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:dd-MM-yyyy}" },
-                            { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
                             { field:"point", title: "Nilai" ,width: "220px"},
                             { field:"certificate_number", title: "No Sertifikat",width: "220px" },
                             { field:"certificate_date", title: "Tanggal Sertifikat" ,width: "220px",format:"{0:dd-MM-yyyy}" },
@@ -120,6 +108,5 @@
                     });
                 })
             })
-        })
     });
 </script>

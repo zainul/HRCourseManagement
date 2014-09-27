@@ -46,11 +46,11 @@
 
     var isregularclient = [
         {
-            value:true,
+            value:1,
             text:"Regular"
         },
         {
-            value:false,
+            value:0,
             text:"Non Regular"
         }
     ]
@@ -62,7 +62,7 @@
         },
         {
             value:null,
-            text:"Belum Terealisasi"
+            text:"Rekomendasi"
         }
     ]
 
@@ -168,12 +168,12 @@
                 pageable: {refresh:true},
                 columns: [
                     { field: "status", title:"Realisasi",values: statusclient,width: "370px" },
+                    { field: "name", title:"Diklat", width: "230px" },
+                    { field: "code", title:"Kode Diklat", width: "230px" },
                     { field: "username", title:"Nama",width: "370px" },
                     { field: "nip", title:"NIP", width: "230px" },
                     { field: "institute", title:"Penyelenggara", width: "230px" },
                     { field: "city", title:"Kota", width: "230px" },
-                    { field: "name", title:"Diklat", width: "230px" },
-                    { field: "code", title:"Kode Diklat", width: "230px" },
                     { field: "start_date", title:"Mulai", width: "230px" ,format:"{0:MM-dd-yyyy}"},
                     { field: "end_date", title:"Akhir", width: "230px" ,format:"{0:MM-dd-yyyy}"},
                     { field: "point", title:"Nilai", width: "230px" },

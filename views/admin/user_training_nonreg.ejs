@@ -1,5 +1,5 @@
-<h4>Diklat Reguler</h4>
-<div id="gridUserTraining"></div>
+<h4>Diklat Non Reguler</h4>
+<div id="gridUserTrainingNonReg"></div>
 
 <script>
     function getDropdownTraining(callback){
@@ -24,28 +24,6 @@
         })
     }
 
-    function getDropdownCity(callback){
-        $.ajax({
-            url:'/city/get_city_kendo_format',
-            type:'get',
-            dataType:'json',
-            success:function(response){
-                callback(response);
-            }
-        })
-    }
-
-    function getDropdownCourseInstitute(callback){
-        $.ajax({
-            url:'/courseinstitute/get_dropdown_kendo_format',
-            type:'get',
-            dataType:'json',
-            success:function(response){
-                callback(response);
-            }
-        })
-    }
-
     function getTimeValidation(date1, date2){
         var d1 = new Date(date1);
         var d2 = new Date(date2);
@@ -53,10 +31,6 @@
     }
 
     var isregularclient = [
-        {
-            value:true,
-            text:"Regular"
-        },
         {
             value:false,
             text:"Non Regular"
@@ -68,24 +42,24 @@
         dataSource = new kendo.data.DataSource({
             transport: {
                 read:  {
-                    url: "/user_training/get_user_training_kendo_format"
+                    url: "/user_training_nonreg/get_user_training_kendo_format"
                 },
                 update: {
                     url: function(options){
-                        return "/user_training/" + options.models[0].id;
+                        return "/user_training_nonreg/" + options.models[0].id;
                     },
                     type:"PUT",
                     dataType: "json"
                 },
                 destroy: {
                     url: function(options){
-                        return "/user_training/" + options.models[0].id;
+                        return "/user_training_nonreg/" + options.models[0].id;
                     },
                     type:"DELETE",
                     dataType: "json"
                 },
                 create: {
-                    url: "/user_training",
+                    url: "/user_training_nonreg",
                     type:"POST",
                     dataType: "json"
                 },
@@ -107,8 +81,8 @@
                     id: "id",
                     fields: {
                         training:{validation: { required: true },field:"training",type: "number", defaultValue: 1 },
-                        organizer:{validation: { required: true },field:"organizer",type: "number", defaultValue: 1 },
-                        city:{validation: { required: true },field:"city",type: "number", defaultValue: 1 },
+                        organizer:{validation: { required: true } },
+                        city:{validation: { required: true } },
                         start_date:{validation: { required: true },type:"date"},
                         end_date:{validation: { required: true,
                             enddatevalidation: function (input) {
@@ -137,7 +111,7 @@
                             },
                             type:"date"},
                         rank:{ validation: { required: true }},
-                        isRegular:{ field:"isRegular",editable:false, defaultValue: true,validation: { required: true } }
+                        isRegular:{ field:"isRegular",editable:false, defaultValue: false,validation: { required: true } }
                     }
                 }
             }
@@ -146,12 +120,9 @@
 
          */
 
-
-        getDropdownCourseInstitute(function(course_institute_data){
             getDropdownTraining(function(training_data){
                 getDropdownUser(function(user_data){
-                    getDropdownCity(function(cities_data){
-                        $("#gridUserTraining").kendoGrid({
+                        $("#gridUserTrainingNonReg").kendoGrid({
                             dataSource: dataSource,
                             pageable: {refresh:true},
                             filterable: {
@@ -177,30 +148,30 @@
                             },
                             columns: [
                                 { field:"training", title: "Diklat",values: training_data, width: "400px"},
-                                { field:"organizer", title: "Penyelenggara",values: course_institute_data ,width: "220px"},
-                                { field:"city", title: "Kota",values: cities_data ,width: "220px"},
+                                { field:"organizer", title: "Penyelenggara" ,width: "220px"},
+                                { field:"city", title: "Kota" ,width: "220px"},
                                 { field:"start_date", title: "Tanggal Mulai" ,width: "220px",format:"{0:MM-dd-yyyy}"},
                                 { field:"end_date", title: "Tanggal Akhir" ,width: "220px",format:"{0:MM-dd-yyyy}"},
                                 { field:"user", title: "Nama Peserta",values:user_data ,width: "220px"},
                                 { field:"point", title: "Nilai" ,width: "220px"},
                                 { field:"certificate_number", title: "No Sertifikat",width: "220px" },
                                 { field:"certificate_date", title: "Tanggal Sertifikat" ,width: "220px",format:"{0:MM-dd-yyyy}" },
-                                { field:"isRegular",values:isregularclient, title: "Regular", width: "220px"},
+                                { field:"isRegular",values:isregularclient, title: "Non Regular", width: "220px"},
                                 { field:"rank", title: "Ranking" ,width: "220px"},
                                 { command: ["edit", "destroy"], title: "&nbsp;", width: "200px" }],
                             editable: "popup",
                             save:function(e){
                                 setTimeout(function(){
-                                    $('#gridUserTraining').data('kendoGrid').dataSource.read();
-                                    $('#gridUserTraining').data('kendoGrid').refresh();
+                                    $('#gridUserTrainingNonReg').data('kendoGrid').dataSource.read();
+                                    $('#gridUserTrainingNonReg').data('kendoGrid').refresh();
                                 },500);
                             }
                         });
-                        var grid = $("#gridUserTraining").data("kendoGrid");
-                        grid.hideColumn(9);
-                    })
+						var grid = $("#gridUserTrainingNonReg").data("kendoGrid");
+            			grid.hideColumn(9);
+                    
                 })
             })
-        })
+        
     });
 </script>

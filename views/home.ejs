@@ -8,6 +8,9 @@
         background:url('/images/background.png');
         background-repeat: repeat;
     }
+    .menu-label{
+        color:black !important;
+    }
 </style>
 <script>
     function loadContent(url){
@@ -58,12 +61,11 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 <li><img src="/images/icon-pln.jpg" style="width: 40px; height: 50px;"/></li>
-                <li class="active"><a href="javascript:void(0)">Sistem Diklat Terpadu</a></li>
-                <li><a href="javascript:loadContent('home/user_training')">Laporan Diklat</a></li>
-                <li><a href="javascript:loadContent('home/user_level_training')">Diklat Jabatan</a></li>
-                <li><a href="javascript:loadContent('home/user_realitation')">Realisasi Diklat</a></li>
+                <li><a href="javascript:loadContent('home/user_training')" class="menu-label"><b>Realisasi Diklat</b></a></li>
+                <li><a href="javascript:loadContent('home/user_level_training')" class="menu-label"><b>Diklat Jabatan</b></a></li>
+                <li><a href="javascript:loadContent('home/user_realitation')" class="menu-label"><b>Sistem Diklat Terpadu</b></a></li>
                 <li class="dropdown">
-                    <a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown">Export Excel<b class="caret"></b></a>
+                    <a href="javascript:void(0)" class="dropdown-toggle menu-label" data-toggle="dropdown"><b>Export Excel</b><b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="javascript:loadContent('home/export_excel_for_user')">Untuk User</a></li>
                         <li><a href="javascript:loadContent('home/export_excel_for_system')">Untuk System</a></li>
